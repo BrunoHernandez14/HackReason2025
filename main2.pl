@@ -18,20 +18,41 @@ drug_property(witch_hazel, [anti_itch, anti_inflammatory]).
 drug_property(oatmeal_bath, [skin_soothing, anti_itch]).
 
 % Illness Treatment Map (indicating which drug properties help which illnesses)
-illness_treatment('Diabetes', [wound_healing, anti_inflammatory]).
-illness_treatment('Hypertension', [blood_thinner, anti_anxiety]).
-illness_treatment('Migraine', [pain_relief, anti_inflammatory, sedative]).
-illness_treatment('Asthma', [decongestant, cough_suppression]).
-illness_treatment('Arthritis', [pain_relief, anti_inflammatory, cooling_effect]).
-illness_treatment('Hemorrhoids', [anti_inflammatory, anti_itch, wound_healing]).
-illness_treatment('Acid Reflux', [acid_neutralizer, digestive_aid]).
-illness_treatment('Bronchitis', [cough_suppression, decongestant, throat_soothing]).
-illness_treatment('Anemia', [wound_healing, digestive_aid]).
-illness_treatment('Eczema', [anti_itch, skin_soothing]).
-illness_treatment('Psoriasis', [anti_inflammatory, skin_soothing]).
-illness_treatment('Indigestion', [digestive_aid, acid_neutralizer]).
-illness_treatment('Insect Bites', [anti_itch, numbing, cooling_effect]).
-illness_treatment('Shingles', [pain_relief, wound_healing, anti_itch]).
+illness_treatment('diabetes', [wound_healing, anti_inflammatory]).
+illness_treatment('hypertension', [blood_thinner, anti_anxiety]).
+illness_treatment('migraine', [pain_relief, anti_inflammatory, sedative]).
+illness_treatment('asthma', [decongestant, cough_suppression]).
+illness_treatment('arthritis', [pain_relief, anti_inflammatory, cooling_effect]).
+illness_treatment('hemorrhoids', [anti_inflammatory, anti_itch, wound_healing]).
+illness_treatment('acid reflux', [acid_neutralizer, digestive_aid]).
+illness_treatment('bronchitis', [cough_suppression, decongestant, throat_soothing]).
+illness_treatment('anemia', [wound_healing, digestive_aid]).
+illness_treatment('eczema', [anti_itch, skin_soothing]).
+illness_treatment('psoriasis', [anti_inflammatory, skin_soothing]).
+illness_treatment('indigestion', [digestive_aid, acid_neutralizer]).
+illness_treatment('insect bites', [anti_itch, numbing, cooling_effect]).
+illness_treatment('shingles', [pain_relief, wound_healing, anti_itch]).
+
+% Drug Interaction Database
+drug_interaction(paracetamol, alcohol).
+drug_interaction(aspirin, ibuprofen).
+drug_interaction(antihistamine, alcohol).
+drug_interaction(nasal_spray, decongestant).
+drug_interaction(honey, aspirin).
+
+% Check for Drug Interactions
+check_interactions(Drug1, Drug2) :-
+    (   drug_interaction(Drug1, Drug2)
+    ;   drug_interaction(Drug2, Drug1) ),
+    format('Warning: ~w and ~w may interact negatively.\n', [Drug1, Drug2]).
+
+% Display Drug Interaction Warnings for a List of Drugs
+check_all_interactions([]).
+check_all_interactions([_]).
+check_all_interactions([Drug1, Drug2 | Rest]) :-
+    check_interactions(Drug1, Drug2),
+    check_all_interactions([Drug1 | Rest]),
+    check_all_interactions([Drug2 | Rest]).
 
 % Match drugs to illnesses based on their properties
 drug_for_illness(Illness, Drug) :-
@@ -52,10 +73,15 @@ intersection([_|T], List, Rest) :-
 % Main function
 main :-
     write('Welcome to Drug Repurposing Tool!'), nl,
-    write('Please enter the illness for which you need repurposed drug suggestions (e.g., \'Diabetes\'): '), nl,
-    read(Illness),
-    (   illness_treatment(Illness, _)
-    ->  format('For ~w, the following drugs can be repurposed:\n', [Illness]),
-        forall(drug_for_illness(Illness, Drug), true)
+    write('Please enter the illness for which you need repurposed drug suggestions (e.g., \'diabetes\'): '), nl,
+    read(UserInput),
+    (   illness_treatment(NormalizedIllness, _)
+    ->  format('For ~w, the following drugs can be repurposed:\n', [NormalizedIllness]),
+        findall(Drug, drug_for_illness(NormalizedIllness, Drug), Drugs),
+        (   Drugs \= []
+        ->  check_all_interactions(Drugs),
+            write('Note: Always consult a doctor before taking any medication.'), nl
+        ;   write('No suitable drugs found for this illness.'), nl
+        )
     ;   write('Sorry, the illness is not in our database.'), nl
     ).
