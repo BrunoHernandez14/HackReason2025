@@ -39,9 +39,10 @@ subset([H|T], List) :-
 
 % Main function
 main :-
-    write('Welcome to the Re:Medical, please enter your symptoms!'), nl,
+    write('Welcome to Re:Medical! Please enter your symptoms.'), nl,
     get_user_symptoms(UserSymptoms),
     (   diagnose_illness(UserSymptoms, Illness)
     ->  format('Based on your symptoms, you might have ~w.\n', [Illness]),
-    ;   write('Your symptoms do not match any known illnesses in the database.'), nl,
+        write('Please consult a doctor for further diagnosis.'), nl
+    ;   write('Your symptoms do not match any known illnesses in the database.'), nl
     ).
