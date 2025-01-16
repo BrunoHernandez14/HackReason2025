@@ -1,38 +1,47 @@
-:- dynamic illness/1, symptoms/2.
+% Illness Database
+illness('Diabetes').
+illness('Hypertension').
+illness('Migraine').
+illness('Asthma').
+illness('Arthritis').
+illness('Hemorrhoids').
+illness('Acid Reflux').
+illness('Bronchitis').
+illness('Anemia').
+illness('Ezcema').
+illness('Psoriasis').
+illness('Indigestion').
+illness('Incest Sting').
+illness('Shingles').
 
-% Illness and Symptoms Lists
+% Symptoms Database
+symptoms('Diabetes', ['Increased thirst', 'Frequent urination', 'Extreme hunger', 
+                      'Unexplained weight loss', 'Fatigue', 'Blurred vision', 'Slow-healing sores']).
+symptoms('Hypertension', ['Headache', 'Shortness of breath', 'Chest pain', 
+                          'Dizziness', 'Fatigue', 'Irregular heartbeat']).
+symptoms('Migraine', ['Severe headache', 'Nausea', 'Sensitivity to light', 
+                      'Sensitivity to sound', 'Blurred vision']).
 
-illness('Period Cramps'). symptoms('Period Cramps', 
-    ['Pain in the lower abdomen', 'Pain in the lower back', 'Pain in the thighs', 'Nausea', 'Vomiting', 'Fatigue', 'Headache']).
-    
-illness('Fevers'). symptoms('Fevers', 
-    ['High Fever', 'Sweating', 'Chills', 'Shivering', 'Weakness']).
-    
-illness('Diabetes'). symptoms('Diabetes', 
-    ['Increased thirst', 'Frequent urination', 'Extreme hunger', 'Fatigue', 'Blurred vision']).
-    
-illness('Migraine'). symptoms('Migraine', 
-    ['Severe headache', 'Nausea', 'Sensitivity to light', 'Pulsating pain', 'Fatigue']).
-    
-illness('Hypertension'). symptoms('Hypertension', 
-    ['Headache', 'Shortness of breath', 'Nosebleeds', 'Dizziness', 'Chest pain']).
-    
-illness('Anemia'). symptoms('Anemia', 
-    ['Fatigue', 'Pale skin', 'Irregular heartbeats', 'Shortness of breath', 'Dizziness']).
-    
-illness('Asthma'). symptoms('Asthma', 
-    ['Shortness of breath', 'Chest tightness', 'Wheezing', 'Coughing', 'Anxiety']).
-    
-illness('Shingles'). symptoms('Shingles', 
-    ['Pain', 'Burning', 'Tingling', 'Red rash', 'Fever']).
-    
-illness('Acid Reflux'). symptoms('Acid Reflux', 
-    ['Heartburn', 'Chest pain', 'Difficulty swallowing', 'Regurgitation', 'Nausea']).
-    
-illness('Arthritis'). symptoms('Arthritis', 
-    ['Joint pain', 'Stiffness', 'Swelling', 'Fatigue', 'Tenderness']).
-    
-illness('Bronchitis'). symptoms('Bronchitis', 
-    ['Cough', 'Production of mucus', 'Fatigue', 'Shortness of breath', 'Chest discomfort']).
+% Prompt the user for symptoms
+get_user_symptoms(UserSymptoms) :-
+    write('Please enter your symptoms as a list (e.g., [\'Symptom1\', \'Symptom2\']): '), nl,
+    read(UserSymptoms).
 
-% Access Symptom List
+% Check if user symptoms match stored symptoms for any illness
+diagnose_illness(UserSymptoms, Illness) :-
+    symptoms(Illness, IllnessSymptoms),
+    subset(UserSymptoms, IllnessSymptoms).
+
+subset([], _).
+subset([H|T], List) :-
+    member(H, List),
+    subset(T, List).
+
+% Main function
+main :-
+    write('Welcome to the Re:Medical, please enter your symptoms!'), nl,
+    get_user_symptoms(UserSymptoms),
+    (   diagnose_illness(UserSymptoms, Illness)
+    ->  format('Based on your symptoms, you might have ~w.\n', [Illness]),
+    ;   write('Your symptoms do not match any known illnesses in the database.'), nl,
+    ).
