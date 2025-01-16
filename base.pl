@@ -80,8 +80,7 @@ can_treat(Drug, Illness) :-
     member(Symptom, Symptoms),
     member(Symptom, Properties).
 
-% Query examples
-:- begin_tests(drug_repurposing).
+
 
 test(paracetamol_for_migraine) :-
     can_treat(paracetamol, migraine).
@@ -128,7 +127,7 @@ test(witch_hazel_for_hemorrhoids) :-
 test(oatmeal_bath_for_eczema) :-
     can_treat(oatmeal_bath, eczema).
 
-:- end_tests(drug_repurposing).
+
 
 % Query to identify potential repurposing options
 ?- can_treat(Drug, Illness).
