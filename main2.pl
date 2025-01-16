@@ -60,7 +60,7 @@ drug_for_illness(Illness, Drug) :-
     drug_property(Drug, DrugProperties),
     intersection(NeededProperties, DrugProperties, MatchedProperties),
     MatchedProperties \= [],  % Ensure at least one property matches
-    format('~w can be repurposed for ~w due to its properties: ~w\n', [Drug, Illness, MatchedProperties]).
+    format('~w can be repurposed for ~w: ~w\n', [Drug, Illness, MatchedProperties]).
 
 % Helper to find intersection of two lists
 intersection([], _, []).
@@ -72,8 +72,8 @@ intersection([_|T], List, Rest) :-
 
 % Main function
 main :-
-    write('Welcome to Drug Repurposing Tool!'), nl,
-    write('Please enter the illness for which you need repurposed drug suggestions (e.g., \'diabetes\'): '), nl,
+    write('Welcome to Re:Medical - The Definitive Drug Repurposing Tool!'), nl,
+    write('Please enter an illness (e.g., \'diabetes\'): '), nl,
     read(UserInput),
     (   illness_treatment(NormalizedIllness, _)
     ->  format('For ~w, the following drugs can be repurposed:\n', [NormalizedIllness]),
