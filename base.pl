@@ -19,8 +19,7 @@ drug(clove_oil).
 drug(witch_hazel).
 drug(oatmeal_bath).
 
-drug_property(paracetamol, 
-[pain_relief, fever_reduction]).
+drug_property(paracetamol, [pain_relief, fever_reduction]).
 drug_property(ibuprofen, [pain_relief, anti_inflammatory]).
 drug_property(antihistamine, [allergy_relief, sedative]).
 drug_property(cough_syrup, [cough_suppression]).
