@@ -53,13 +53,18 @@ subset([H|T], List) :-
     member(H, List),
     subset(T, List).
 
+% Display possible treaments
+list_treatements(IllnessTreatments) :-
+    write('Here are some at home remedies: '), nl,
+    forall(member(Treatment, IllnessTreatments), format('~w\n', [Treatment])).
+
 % Main function
 main :-
     write('Welcome to Re:Medical! Please enter your symptoms.'), nl,
     get_user_symptoms(UserSymptoms),
     (   diagnose_illness(UserSymptoms, Illness)
     ->  format('Based on your symptoms, you might have ~w.\n', [Illness]), 
-        write('Here are some at home remedies: '), nl,
+        list_treatements([Illness]),
         write('Please consult a doctor though!'), nl
     ;   write('Your symptoms do not match any known illnesses in the database.'), nl
     ).
