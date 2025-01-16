@@ -1,5 +1,7 @@
 :- dynamic illness/1, symptoms/2.
 
+% Illness and Symptoms Lists
+
 illness('Period Cramps'). symptoms('Period Cramps', 
     ['Pain in the lower abdomen', 'Pain in the lower back', 'Pain in the thighs', 'Nausea', 'Vomiting', 'Fatigue', 'Headache']).
     
