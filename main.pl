@@ -1,5 +1,5 @@
-:- dynamic illness/1.
-:- dynamic symptoms/2.
+:- dynamic illness/1, symptoms/2.
+
 % Illness List
     illness('Period Cramps').
     illness('Fevers').
