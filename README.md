@@ -37,5 +37,5 @@ Welcome to Re:Medical, a Prolog-based application designed to help identify illn
 
 ### 1. Running the Program
 - Load the Prolog file into a Prolog interpreter (e.g., SWI-Prolog).
-- Start the main function by entering:
+- Start the main function by entering: main.
 
