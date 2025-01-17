@@ -2,7 +2,7 @@
 
 ## Re:Medical - The Definitive Drug Repurposing Tool
 
-Welcome to Re:Medical, a Prolog-based application designed to help identify illnesses, suggest treatments, and highlight potential drug interactions. This tool focuses on drug repurposing for common illnesses, providing home remedy suggestions and diagnostics based on user symptoms.
+Welcome to Re:Medical, a Prolog-based application designed to help identify an illness, suggest treatments based on everyday known cheaper drug remedies and highlight potential drug interactions. This tool focuses on drug repurposing for common illnesses, providing home remedy suggestions and diagnostics based on user symptoms.
 
 ---
 
