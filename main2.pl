@@ -1,5 +1,7 @@
 % Illness Database
-illness('Diabetes').
+illness('Menstral Cramps').
+illness('influenza').
+illness('coronavirus').
 illness('Hypertension').
 illness('Migraine').
 illness('Asthma').
@@ -13,10 +15,10 @@ illness('Psoriasis').
 illness('Indigestion').
 illness('Insect Bites').
 illness('Shingles').
+illness('Seasonal Alergies').
 
 % Symptoms Database
-symptoms('Diabetes', ['Increased thirst', 'Frequent urination', 'Extreme hunger', 
-                      'Unexplained weight loss', 'Fatigue', 'Blurred vision', 'Slow-healing sores']).
+symptoms('', ['', '', '',]).
 symptoms('Hypertension', ['Headache', 'Shortness of breath', 'Chest pain', 
                           'Dizziness', 'Fatigue', 'Irregular heartbeat']).
 symptoms('Migraine', ['Severe headache', 'Nausea', 'Sensitivity to light', 
