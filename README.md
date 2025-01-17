@@ -1,2 +1,2 @@
 # HackReason2025
-for the dub
+Re:Medical, a drug repurposing software.
