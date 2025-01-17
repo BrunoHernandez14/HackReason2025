@@ -140,9 +140,9 @@ list_treatments(IllnessTreatments) :-
 % Main function
 main :-
     write('Welcome to Re:Medical - The Definitive Drug Repurposing Tool!'), nl,
-    write('Please enter a known illness (e.g., \'hypertension\', \'migraine\', etc.) or \'diagnosis\' for symptom matching: '), nl,
+    write('Please enter a known illness (e.g., \'Hypertension\', \'Migraine\', etc.) or \'Diagnosis\' for symptom matching: '), nl,
     read(UserInput),
-    handle_user_input(NormalizedInput).
+    handle_user_input(UserInput).
 
 % Handle user input
 handle_user_input('diagnosis') :-
