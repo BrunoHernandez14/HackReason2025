@@ -1,7 +1,7 @@
 % Illness Database
 illness('Menstral Cramps').
-illness('influenza').
-illness('coronavirus').
+illness('Influenza').
+illness('Coronavirus').
 illness('Hypertension').
 illness('Migraine').
 illness('Asthma').
@@ -18,10 +18,10 @@ illness('Shingles').
 illness('Seasonal Alergies').
 
 % Symptoms Database
-symptoms('Seasonal Alergies', ['Coughing', 'Sneezing', 'Runny Nose', '',]).
-symptoms('Menstral Cramps', ['Pain in upper abdoman', 'Cramping', 'Mood Swings', 'Nausea', ]).
-symptoms('coronavirus', ['Fever', 'Cold Sweats', 'Wheezing',]).
-symptoms('influenza', ['Fatigue', 'Coughing', 'Mucus production', 'Fever',]).
+symptoms('Seasonal Alergies', ['Coughing', 'Sneezing', 'Runny Nose']).
+symptoms('Menstral Cramps', ['Pain in upper abdoman', 'Cramping', 'Mood Swings', 'Nausea']).
+symptoms('Coronavirus', ['Fever', 'Cold Sweats', 'Wheezing']).
+symptoms('Influenza', ['Fatigue', 'Coughing', 'Mucus production', 'Fever']).
 symptoms('Hypertension', ['Headache', 'Shortness of breath', 'Chest pain', 
                           'Dizziness', 'Fatigue', 'Irregular heartbeat']).
 symptoms('Migraine', ['Severe headache', 'Nausea', 'Sensitivity to light', 
@@ -63,21 +63,22 @@ drug_property(witch_hazel, [anti_itch, anti_inflammatory]).
 drug_property(oatmeal_bath, [skin_soothing, anti_itch]).
 
 % Illness Treatment Map (indicating which drug properties help which illnesses)
-illness_treatment('influenza', [cough_suppression, pain_relief, anti_nausea]).
-illness_treatment('coronavirus', [cough_suppression, pain_relief, anti_nausea]).
-illness_treatment('hypertension', [blood_thinner, anti_anxiety]).
-illness_treatment('migraine', [pain_relief, anti_inflammatory, sedative]).
-illness_treatment('asthma', [decongestant, cough_suppression]).
-illness_treatment('arthritis', [pain_relief, anti_inflammatory, cooling_effect]).
-illness_treatment('hemorrhoids', [anti_inflammatory, anti_itch, wound_healing]).
-illness_treatment('acid reflux', [acid_neutralizer, digestive_aid]).
-illness_treatment('bronchitis', [cough_suppression, decongestant, throat_soothing]).
-illness_treatment('anemia', [wound_healing, digestive_aid]).
-illness_treatment('eczema', [anti_itch, skin_soothing]).
-illness_treatment('psoriasis', [anti_inflammatory, skin_soothing]).
-illness_treatment('indigestion', [digestive_aid, acid_neutralizer]).
-illness_treatment('insect bites', [anti_itch, numbing, cooling_effect]).
-illness_treatment('shingles', [pain_relief, wound_healing, anti_itch]).
+illness_treatment('Influenza', [cough_suppression, pain_relief, anti_nausea]).
+illness_treatment('Menstrual Cramps', [pain_relief, anti_inflammatory]).
+illness_treatment('Coronavirus', [cough_suppression, pain_relief, anti_nausea]).
+illness_treatment('Hypertension', [blood_thinner, anti_anxiety]).
+illness_treatment('Migraine', [pain_relief, anti_inflammatory, sedative]).
+illness_treatment('Asthma', [decongestant, cough_suppression]).
+illness_treatment('Arthritis', [pain_relief, anti_inflammatory, cooling_effect]).
+illness_treatment('Hemorrhoids', [anti_inflammatory, anti_itch, wound_healing]).
+illness_treatment('Acid reflux', [acid_neutralizer, digestive_aid]).
+illness_treatment('Bronchitis', [cough_suppression, decongestant, throat_soothing]).
+illness_treatment('Anemia', [wound_healing, digestive_aid]).
+illness_treatment('Eczema', [anti_itch, skin_soothing]).
+illness_treatment('Psoriasis', [anti_inflammatory, skin_soothing]).
+illness_treatment('Indigestion', [digestive_aid, acid_neutralizer]).
+illness_treatment('Insect bites', [anti_itch, numbing, cooling_effect]).
+illness_treatment('Shingles', [pain_relief, wound_healing, anti_itch]).
 
 % Drug Interaction Database
 drug_interaction(paracetamol, alcohol).
@@ -139,29 +140,36 @@ list_treatments(IllnessTreatments) :-
 % Main function
 main :-
     write('Welcome to Re:Medical - The Definitive Drug Repurposing Tool!'), nl,
-    write('Please enter a known illness: '), nl, nl,
-    write('[\'hypertension\', \'migraine\', \'asthma\', \'arthritis\', ]'), nl,
-    write('[\'hemorrhoids\', \'acid reflux\', \'bronchitis\', \'anemia\', ]'), nl,
-    write('[\'eczema\', \'psoriasis\', \'indigestion\', \'insect bite\', ]'), nl,
-    write('[\'shingles\', \'coronavirus\', \'influenza\', \'other/diagnosis\' ]'), nl, nl,
-    
+    write('Please enter a known illness (e.g., \'hypertension\', \'migraine\', etc.) or \'diagnosis\' for symptom matching: '), nl,
     read(UserInput),
-    (UserInput == 'other' ; UserInput == 'diagnosis')
-    ->  get_user_symptoms(UserSymptoms),
-        (   diagnose_illness(UserSymptoms, Illness)
-        ->  format('Based on your symptoms, you might have ~w.\n', [Illness]), 
-            list_treatments([Illness]),
-            write('Please consult a doctor though!'), nl
-        ;   write('Your symptoms do not match any known illnesses in the database.'), nl
+    handle_user_input(NormalizedInput).
+
+% Handle user input
+handle_user_input('diagnosis') :-
+    get_user_symptoms(UserSymptoms),
+    (   diagnose_illness(UserSymptoms, Illness) ->
+        format('Based on your symptoms, you might have ~w.\n', [Illness]),
+        (   illness_treatment(Illness, Treatments) ->
+            list_treatments(Treatments),
+            write('Please consult a doctor for professional advice!'), nl
+        ;   write('No treatments available for this illness in the database.'), nl
         )
-    ;  
-    (   illness_treatment(NormalizedIllness, _)% Check if the user input matches a known illness
-    ->  format('For ~w, the following drugs can be repurposed:\n', [UserInput]),
+    ;   write('No match found for your symptoms in the database.'), nl
+    ).
+
+handle_user_input(UserInput) :-
+    (   illness(UserInput) ->
+        format('For ~w, the following drugs can be repurposed:\n', [UserInput]),
         findall(Drug, drug_for_illness(UserInput, Drug), Drugs),
-        (   Drugs \= []
-        ->  check_all_interactions(Drugs),
+        (   Drugs \= [] ->
+            check_all_interactions(Drugs),
             write('Note: Always consult a doctor before taking any medication.'), nl
         ;   write('No suitable drugs found for this illness.'), nl
         )
-    ;   write('Input Invalid')
+    ;   write('Invalid illness entered. Please try again.'), nl
     ).
+
+% Fallback for unknown input
+handle_user_input(_) :-
+    write('Unknown command or input. Please try again.'), nl.
+
