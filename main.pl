@@ -172,4 +172,3 @@ handle_user_input(UserInput) :-
 % Fallback for unknown input
 handle_user_input(_) :-
     write('Unknown command or input. Please try again.'), nl.
-
