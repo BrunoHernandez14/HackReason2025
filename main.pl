@@ -1,7 +1,7 @@
 % Illness Database
 illness('Menstral Cramps').
-illness('Influenza').
-illness('Coronavirus').
+illness('influenza').
+illness('coronavirus').
 illness('Hypertension').
 illness('Migraine').
 illness('Asthma').
@@ -18,6 +18,10 @@ illness('Shingles').
 illness('Seasonal Alergies').
 
 % Symptoms Database
+symptoms('Seasonal Alergies', ['Coughing', 'Sneezing', 'Runny Nose', '',]).
+symptoms('Menstral Cramps', ['Pain in upper abdoman', 'Cramping', 'Mood Swings', 'Nausea', ]).
+symptoms('coronavirus', ['Fever', 'Cold Sweats', 'Wheezing',]).
+symptoms('influenza', ['Fatigue', 'Coughing', 'Mucus production', 'Fever',]).
 symptoms('Hypertension', ['Headache', 'Shortness of breath', 'Chest pain', 
                           'Dizziness', 'Fatigue', 'Irregular heartbeat']).
 symptoms('Migraine', ['Severe headache', 'Nausea', 'Sensitivity to light', 
@@ -135,34 +139,29 @@ list_treatments(IllnessTreatments) :-
 % Main function
 main :-
     write('Welcome to Re:Medical - The Definitive Drug Repurposing Tool!'), nl,
-    write('Please enter a known illness (e.g., \'hypertension\', \'migraine\', etc.) or \'diagnosis\' for symptom matching: '), nl,
+    write('Please enter a known illness: '), nl, nl,
+    write('[\'hypertension\', \'migraine\', \'asthma\', \'arthritis\', ]'), nl,
+    write('[\'hemorrhoids\', \'acid reflux\', \'bronchitis\', \'anemia\', ]'), nl,
+    write('[\'eczema\', \'psoriasis\', \'indigestion\', \'insect bite\', ]'), nl,
+    write('[\'shingles\', \'coronavirus\', \'influenza\', \'other/diagnosis\' ]'), nl, nl,
+    
     read(UserInput),
-    handle_user_input(NormalizedInput).
-
-% Handle user input
-handle_user_input('diagnosis') :-
-    get_user_symptoms(UserSymptoms),
-    (   diagnose_illness(UserSymptoms, Illness) ->
-        format('Based on your symptoms, you might have ~w.\n', [Illness]),
-        illness_treatment(Illness, Treatments),
-        list_treatments(Treatments),
-        write('Please consult a doctor for professional advice!'), nl
-    ;   write('No match found for your symptoms in the database.'), nl
-    ).
-
-handle_user_input(UserInput) :-
-    (   illness(UserInput) ->
-        format('For ~w, the following drugs can be repurposed:\n', [UserInput]),
+    (UserInput == 'other' ; UserInput == 'diagnosis')
+    ->  get_user_symptoms(UserSymptoms),
+        (   diagnose_illness(UserSymptoms, Illness)
+        ->  format('Based on your symptoms, you might have ~w.\n', [Illness]), 
+            list_treatments([Illness]),
+            write('Please consult a doctor though!'), nl
+        ;   write('Your symptoms do not match any known illnesses in the database.'), nl
+        )
+    ;  
+    (   illness_treatment(NormalizedIllness, _)% Check if the user input matches a known illness
+    ->  format('For ~w, the following drugs can be repurposed:\n', [UserInput]),
         findall(Drug, drug_for_illness(UserInput, Drug), Drugs),
-        (   Drugs \= [] ->
-            check_all_interactions(Drugs),
+        (   Drugs \= []
+        ->  check_all_interactions(Drugs),
             write('Note: Always consult a doctor before taking any medication.'), nl
         ;   write('No suitable drugs found for this illness.'), nl
         )
-    ;   write('Invalid illness entered. Please try again.'), nl
+    ;   write('Input Invalid')
     ).
-
-% Fallback for unknown input
-handle_user_input(_) :-
-    write('Unknown command or input. Please try again.'), nl.
-
