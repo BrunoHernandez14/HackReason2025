@@ -149,12 +149,14 @@ handle_user_input('diagnosis') :-
     get_user_symptoms(UserSymptoms),
     (   diagnose_illness(UserSymptoms, Illness) ->
         format('Based on your symptoms, you might have ~w.\n', [Illness]),
-        (   illness_treatment(Illness, Treatments) ->
-            list_treatments(Treatments),
-            write('Please consult a doctor for professional advice!'), nl
-        ;   write('No treatments available for this illness in the database.'), nl
-        )
-    ;   write('No match found for your symptoms in the database.'), nl
+        illness(Illness) ->
+        format('For ~w, the following drugs can be repurposed:\n', [Illness]),
+        findall(Drug, drug_for_illness(Illness, Drug), Drugs),
+        (   Drugs \= [] ->
+            check_all_interactions(Drugs),
+            write('Note: Always consult a doctor before taking any medication.'), nl
+        ;   write('No suitable drugs found for this illness.'), nl
+        )   
     ).
 
 handle_user_input(UserInput) :-
@@ -165,10 +167,5 @@ handle_user_input(UserInput) :-
             check_all_interactions(Drugs),
             write('Note: Always consult a doctor before taking any medication.'), nl
         ;   write('No suitable drugs found for this illness.'), nl
-        )
-    ;   write('Invalid illness entered. Please try again.'), nl
+        )   
     ).
-
-% Fallback for unknown input
-handle_user_input(_) :-
-    write('Unknown command or input. Please try again.'), nl.
