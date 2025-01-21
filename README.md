@@ -36,6 +36,6 @@ Welcome to Re:Medical, a Prolog-based application designed to help identify an i
 ## Usage Instructions
 
 ### 1. Running the Program
-- Load the Prolog file into a Prolog interpreter (e.g., SWI-Prolog).
+- Load the Ciao Prolog file into a Prolog interpreter (e.g., SWI-Prolog).
 - Start the main function by entering: main.
 
